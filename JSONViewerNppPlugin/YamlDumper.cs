@@ -261,7 +261,7 @@ Got
             return tests_failed;
         }
 
-        public static void Main(string[] args)
+        public static void RunAll(string[] args)
         {
             Tuple<string, string, string>[] tests = {
 				// space at end of key

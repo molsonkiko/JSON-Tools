@@ -34,7 +34,7 @@ namespace JSON_Viewer.JSONViewerNppPlugin
         /// A YYYY-MM-DD hh:mm:ss.sss datetime
         /// </summary>
         DATETIME = 2048,
-        /// <summary>
+        ///// <summary>
         ///// An HH:MM:SS 24-hour time
         ///// </summary>
         //TIME = 4096,

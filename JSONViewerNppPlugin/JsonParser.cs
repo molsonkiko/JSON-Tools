@@ -575,7 +575,11 @@ namespace JSON_Viewer.JSONViewerNppPlugin
                     if (lint == null) throw new JsonParserException("Tried to terminate object with ']'", cur_c, ii);
                     lint.Add(new JsonLint("Tried to terminate object with ']'", ii, line_num, cur_c));
                 }
-                else if (cur_c == '"' || (allow_singlequoted_str && cur_c == '\''))
+                else if (cur_c == '"' 
+                    || (allow_singlequoted_str && cur_c == '\'')
+                    //|| (allow_unquoted_str && (('a' <= cur_c && cur_c <= 'z') || ('A' <= cur_c && cur_c <= 'Z') || cur_c == '_'))
+                    //// unquoted strings may someday be allowed so long as they start with letters or underscore and contain only letters, underscore, and digits
+                    )
                 {
                     if (children.Count > 0 && !already_seen_comma)
                     {
