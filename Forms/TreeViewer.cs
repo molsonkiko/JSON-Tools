@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using JSON_Viewer.JSONViewerNppPlugin;
+﻿using JSON_Viewer.JSONViewerNppPlugin;
 
 namespace JSON_Viewer.Forms
 {
     public partial class TreeViewer : Form
     {
         public JsonParser jsonParser { get; set; }
+        public RemesParser remesParser { get; set; }
+        public JNode json { get; set; }
 
         [STAThread] // this is needed to allow your form to open up a file browser dialog while in debug mode
         static void Main()
@@ -26,17 +19,23 @@ namespace JSON_Viewer.Forms
         {
             InitializeComponent();
             jsonParser = new JsonParser();
+            remesParser = new RemesParser();
         }
+
+        private static readonly string HELP_TEXT = "You have been helped!";
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            JsonBox.Text = "You have been helped!";
+            MessageBox.Show(HELP_TEXT,
+                    "JSON Tree Viewer Help",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
+        //private void textBox1_TextChanged(object sender, EventArgs e)
+        //{
 
-        }
+        //}
 
         private void TreeCreationButton_MouseUp(object sender, EventArgs e)
         {
@@ -46,13 +45,17 @@ namespace JSON_Viewer.Forms
         private void FileSelectionButton_MouseUp(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "All files|*.*|JSON files|*.json|Jupyter Notebooks|*.ipynb";
+            openFileDialog1.Filter = "JSON files|*.json|All files|*.*|Jupyter Notebooks|*.ipynb";
             openFileDialog1.InitialDirectory = @"C:\";
             openFileDialog1.Title = "Browse JSON files";
             openFileDialog1.CheckFileExists = true;
             string json_str = "";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                if (!File.Exists(openFileDialog1.FileName))
+                {
+                    return;
+                }
                 json_str = File.ReadAllText(openFileDialog1.FileName);
             }
             JsonTreePopulate(json_str);
@@ -60,7 +63,7 @@ namespace JSON_Viewer.Forms
 
         private void JsonTreePopulate(string json_str)
         {
-            JNode json = new JNode(null, Dtype.NULL, 0);
+            json = new JNode(null, Dtype.NULL, 0);
             try
             {
                 json = jsonParser.Parse(json_str);
@@ -80,6 +83,8 @@ namespace JSON_Viewer.Forms
             TreeNode root = new TreeNode();
             JsonTreePopulateHelper(root, json);
             JsonTree.Nodes.Add(root);
+            root.Text = "JSON";
+            root.Expand();
             UseWaitCursor = false; // gotta turn it off or else it persists until the form closes
             JsonTree.EndUpdate();
         }
@@ -124,6 +129,15 @@ namespace JSON_Viewer.Forms
                     // it's a scalar, so just display the key and the value of the json
                     root.Nodes.Add(key, $"{key} : {child.ToString()}");
                 }
+            }
+        }
+
+        private void QueryBox_PressEnter(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                JNode query_result = remesParser.Search(QueryBox.Text, json);
+                JsonBox.Text = query_result.PrettyPrint();
             }
         }
     }
