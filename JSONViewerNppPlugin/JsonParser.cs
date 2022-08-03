@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿/*
+A parser and linter for JSON.
+*/
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace JSON_Viewer.JSONViewerNppPlugin

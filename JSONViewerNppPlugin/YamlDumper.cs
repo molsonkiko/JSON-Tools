@@ -1,10 +1,6 @@
 ﻿/*
 Reads a JSON document and outputs YAML that can be serialized back to 
 equivalent (or very nearly equivalent) JSON.
-
-There is also a CLI utility that accepts a letter ('j' or 'y') and a filename as an argument and prints the
-resultant pretty-printed JSON (if first arg j) or YAML (if first arg y) document (UTF-8 encoded). 
-Redirecting this output to a text file allows the creation of a new YAML file.
 */
 using System.Text;
 using System.Text.RegularExpressions;
@@ -232,8 +228,11 @@ namespace JSON_Viewer.JSONViewerNppPlugin
         {
             return Dump(json, 4);
         }
+    }
 
-        public int MyUnitTest(Tuple<string, string, string>[] testcases)
+    public class YamlDumperTester
+    {
+        public static int MyUnitTest(Tuple<string, string, string>[] testcases)
         {
             JsonParser jsonParser = new JsonParser();
             int tests_failed = 0;
@@ -252,7 +251,7 @@ Expected
 {2}
 Got
 {3}",
-                                      ii+1, description, correct, result));
+                                      ii + 1, description, correct, result));
                     tests_failed++;
                 }
             }
@@ -261,7 +260,7 @@ Got
             return tests_failed;
         }
 
-        public static void RunAll(string[] args)
+        public static void Test()
         {
             Tuple<string, string, string>[] tests = {
 				// space at end of key
@@ -313,96 +312,7 @@ Got
                 Tuple.Create("{\"\\\"a: 'b'\": \"a\"}", "\'\"a: \'\'b\'\'\': a\n",
                             "key contains quotes and colon")
             };
-            YamlDumper yamlDumper = new YamlDumper();
-            var sw = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8);
-            sw.AutoFlush = true;
-            Console.SetOut(sw);
-            JsonParser parser = new JsonParser();
-            if (args.Length == 0)
-            {
-                Console.WriteLine(@"=========================
-Testing JSON parser
-=========================
-");
-                JsonParserTester.Test();
-                Console.WriteLine(@"=========================
-Testing JSON parser advanced options (javascript comments, dates, datetimes, singlequoted strings)
-=========================
-");
-                JsonParserTester.TestSpecialParserSettings();
-                Console.WriteLine(@"=========================
-Testing YAML dumper
-=========================
-");
-                yamlDumper.MyUnitTest(tests);
-                Console.WriteLine(@"=========================
-Testing Binops
-=========================
-");
-                BinopTester.Test();
-                Console.WriteLine(@"=========================
-Testing ArgFunctions
-=========================
-");
-                ArgFunctionTester.Test();
-                Console.WriteLine(@"=========================
-Testing slice extension
-=========================
-");
-                SliceTester.Test();
-                Console.WriteLine(@"=========================
-Testing RemesPath lexer
-=========================
-");
-                RemesPathLexerTester.Test();
-                Console.WriteLine(@"=========================
-Testing RemesPath parser and compiler
-=========================
-");
-                RemesParserTester.Test();
-                Console.WriteLine(@"=========================
-Performance tests for JsonParser and RemesPath
-=========================
-");
-                RemesPathBenchmarker.BenchmarkBigFile("@[@[:].z =~ `(?i)[a-z]{5}`]", 14);
-                Console.WriteLine(@"=========================
-Testing JsonSchema generator
-=========================
-");
-                JsonSchemaMakerTester.Test();
-                Console.WriteLine(@"=========================
-Testing JSON tabularizer
-=========================
-");
-                JsonTabularizerTester.Test();
-                Console.WriteLine(@"=========================
-Testing JSON parser's linter functionality
-=========================
-");
-                JsonParserTester.TestLinter();
-            }
-            else
-            {
-                JsonParser jsonParser = new JsonParser();
-                string out_type = args[0].ToLower();
-                // Slice extension method from JsonPath module
-                string fname = String.Join(' ', args.Slice("1:"));
-                StreamReader streamReader = new StreamReader(fname);
-                string jsonstr = streamReader.ReadToEnd();
-                JNode json = jsonParser.Parse(jsonstr);
-                streamReader.Close();
-                // sw.WriteLine(EncodeNonAsciiCharacters(dumper.Dump(json, 2)));
-                // the above line would convert UTF-16 characters to \uxxxx format.
-                // That may be desirable, but in my experience it is unnecessary.
-                if (out_type[0] == 'j')
-                {
-                    sw.WriteLine((out_type.Length == 2 && out_type[1] == 'p') ? json.PrettyPrint(4) : json.ToString());
-                }
-                else
-                {
-                    sw.WriteLine(yamlDumper.Dump(json, 2));
-                }
-            }
+            MyUnitTest(tests);
         }
     }
 }

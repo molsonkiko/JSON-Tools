@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿/*
+A query language for JSON. 
+*/
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Diagnostics; // for Stopwatch class
 

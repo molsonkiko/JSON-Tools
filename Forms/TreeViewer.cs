@@ -1,4 +1,7 @@
-﻿using JSON_Viewer.JSONViewerNppPlugin;
+﻿/*
+A form for creating a tree view of JSON and also making Remespath queries.
+*/
+using JSON_Viewer.JSONViewerNppPlugin;
 
 namespace JSON_Viewer.Forms
 {
@@ -9,10 +12,10 @@ namespace JSON_Viewer.Forms
         public JNode json { get; set; }
 
         [STAThread] // this is needed to allow your form to open up a file browser dialog while in debug mode
-        static void Main()
+        static void Main(string[] args)
         {
             Application.Run(new TreeViewer());
-            //YamlDumper.RunAll(new string[] {});
+            Runner.RunAll(args); // run all tests for the app
         }
 
         public TreeViewer()

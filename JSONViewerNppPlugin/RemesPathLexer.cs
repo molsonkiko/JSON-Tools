@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿/*
+Breaks a Remespath query into tokens. 
+*/
+using System.Text.RegularExpressions;
 using System.Text;
 
 namespace JSON_Viewer.JSONViewerNppPlugin

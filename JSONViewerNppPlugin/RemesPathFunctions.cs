@@ -1,7 +1,6 @@
 ﻿/*
- * TODO:
- *  1. Figure out how to implement vectorized ArgFunctions, vectorized binops
- * */
+A library of built-in functions for the RemesPath query language.
+*/
 using System.Text;
 using System.Text.RegularExpressions;
 

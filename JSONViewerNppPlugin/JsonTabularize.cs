@@ -1,4 +1,10 @@
-﻿using System.Text;
+﻿/*
+Utilities for converting JSON with a "tabular" layout 
+(broadly speaking, arrays of arrays, objects with keys mapping to parallel arrays, and arrays of same-format objects)
+into arrays of same-format objects.
+Uses an algorithm to flatten nested JSON.
+*/
+using System.Text;
 
 namespace JSON_Viewer.JSONViewerNppPlugin
 {

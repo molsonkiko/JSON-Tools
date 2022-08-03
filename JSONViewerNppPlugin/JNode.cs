@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿/*
+A class for representing arbitrary JSON.
+*/
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace JSON_Viewer.JSONViewerNppPlugin
@@ -52,33 +55,33 @@ namespace JSON_Viewer.JSONViewerNppPlugin
         SCALAR = FLOAT | INT | BOOL | STR | NULL | REGEX | DATETIME | DATE, // | TIME 
     }
 
-    // <summary>
-    // JSON documents are parsed as JNodes, JObjects, and JArrays. JObjects and JArrays are subclasses of JNode.
-    //    A JSON node, for use in creating a drop-down tree
-    //    Here's an example of how a small JSON document (with newlines as shown)
-    //    would be parsed as JNodes:
-    // <example>
-    //example.json
-    //{
-    //"a": [
-    //    1,
-    //    true,
-    //        {"b": 0.5, "c": "a"},
-    //    null
-    //    ]
-    //}
-    //should be parsed as:
-    //    node1: JObject(type =  Dtype.OBJ, line_num = 1, children = Dictionary<string, JNode>{"a": node2})
-    //    node2: JArray(type =  Dtype.ARR, line_num = 2, children = List<JNode>{node3, node4, node5, node8})
-    //    node3: JNode(value = 1, type =  Dtype.INT, line_num = 3)
-    //    node4: JNode(value = true, type = Dtype.BOOL, line_num = 4)
-    //    node5: JObject(type = Dtype.OBJ, line_num = 5,
-    //                   children = Dictionary<string, JNode>{"b": node6, "c": node7})
-    //    node6: JNode(value = 0.5, type = Dtype.FLOAT, line_num = 5)
-    //    node7: JNode(value = "a", type = Dtype.STR, line_num = 5)
-    //    node8: JNode(value = null, type = Dtype.NULL, line_num = 6)
-    // </example>
-    // </summary>
+    /// <summary>
+    /// JSON documents are parsed as JNodes, JObjects, and JArrays. JObjects and JArrays are subclasses of JNode.
+    ///    A JSON node, for use in creating a drop-down tree
+    ///    Here's an example of how a small JSON document (with newlines as shown)
+    ///    would be parsed as JNodes:
+    /// <example>
+    ///example.json
+    ///{
+    ///"a": [
+    ///    1,
+    ///    true,
+    ///        {"b": 0.5, "c": "a"},
+    ///    null
+    ///    ]
+    ///}
+    ///should be parsed as:
+    ///    node1: JObject(type =  Dtype.OBJ, line_num = 1, children = Dictionary<string, JNode>{"a": node2})
+    ///    node2: JArray(type =  Dtype.ARR, line_num = 2, children = List<JNode>{node3, node4, node5, node8})
+    ///    node3: JNode(value = 1, type =  Dtype.INT, line_num = 3)
+    ///    node4: JNode(value = true, type = Dtype.BOOL, line_num = 4)
+    ///    node5: JObject(type = Dtype.OBJ, line_num = 5,
+    ///                   children = Dictionary<string, JNode>{"b": node6, "c": node7})
+    ///    node6: JNode(value = 0.5, type = Dtype.FLOAT, line_num = 5)
+    ///    node7: JNode(value = "a", type = Dtype.STR, line_num = 5)
+    ///    node8: JNode(value = null, type = Dtype.NULL, line_num = 6)
+    /// </example>
+    /// </summary>
     public class JNode : IComparable
     {
         public IComparable? value; // null for arrays and objects
